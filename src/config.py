@@ -1,0 +1,4 @@
+# Flask run configuration defaults
+DEFAULT_FLASK_RUN_HOST = "127.0.0.1"
+DEFAULT_FLASK_RUN_PORT = 5001
+DEFAULT_FLASK_DEBUG = True
