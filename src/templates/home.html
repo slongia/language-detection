@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Language Detector</title>
+</head>
+
+<body class="bg-blue-50 flex items-center justify-center min-h-screen">
+    <div class="container mx-auto bg-white shadow-lg rounded-lg p-8">
+        <div class="language-list mb-8">
+            <h2 class="text-2xl font-bold text-blue-700 mb-6">Supported Languages:</h2>
+            <div class="grid grid-cols-2 gap-4 text-blue-600">
+                <p>English</p>
+                <p>Malayalam</p>
+                <p>Hindi</p>
+                <p>Tamil</p>
+                <p>Portugeese</p>
+                <p>French</p>
+                <p>Dutch</p>
+                <p>Spanish</p>
+                <p>Greek</p>
+                <p>Russian</p>
+                <p>Danish</p>
+                <p>Italian</p>
+                <p>Turkish</p>
+                <p>Sweedish</p>
+                <p>Arabic</p>
+                <p>German</p>
+                <p>Kannada</p>
+            </div>
+        </div>
+        <header class="header text-center mb-8">
+            <h1 class="text-3xl font-bold text-blue-800">Language Detector</h1>
+        </header>
+        <main class="main-content">
+            <form action="\predict" method="POST" class="space-y-6">
+                <textarea name="text"
+                    class="w-full h-40 p-4 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Type your sentence here..." required></textarea>
+                <button type="submit"
+                    class="w-full bg-blue-700 text-white py-3 px-6 rounded-lg hover:bg-blue-800">Detect
+                    Language</button>
+            </form>
+            <div class="result mt-8 text-center text-blue-700 text-lg">
+                <h1>{{ pred }}</h1>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
