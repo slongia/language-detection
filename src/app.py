@@ -79,39 +79,31 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        text = request.form.get("text", "").strip()  # Use .get with default and strip
+        text = request.form.get("text", "").strip()
         if not text:
             return render_template(
                 "home.html", pred="Error: Input text cannot be empty."
             )
 
-        # Preprocessing the text using the dedicated function
         processed_text = preprocess_text(text)
-        dat = [processed_text]  # Model expects a list/iterable
+        dat = [processed_text]
 
-        # Creating the vector using the pre-loaded vectorizer
         vect = vectorizer.transform(dat).toarray()
 
-        # Making the prediction using the pre-loaded model
         my_pre = model.predict(vect)
 
-        # Inverse transform using the pre-loaded and fitted label encoder
         predicted_language = le.inverse_transform(my_pre)[0]  # Get the first element
 
         return render_template(
             "home.html", pred=f"The predicted language is: '{predicted_language}'"
         )
 
-    # Keep specific error handling, but add logging
-    except (
-        KeyError
-    ) as e:  # Should not happen with request.form.get, but kept for safety
+    except KeyError as e:
         logging.warning(f"Missing form field in request: {e}")
         return render_template(
             "home.html", pred="Error: Missing 'text' field in the request."
         )
     except ValueError as e:
-        # This might catch issues during transform/predict if input is unexpected after preprocessing
         logging.error(f"ValueError during prediction: {e}")
         return render_template(
             "home.html", pred="Error: Invalid input causing prediction issue."
@@ -127,10 +119,9 @@ def predict():
 
 
 if __name__ == "__main__":
-    # Use environment variables for host/port/debug if available, otherwise use defaults from config
     host = os.environ.get("FLASK_RUN_HOST", config.DEFAULT_FLASK_RUN_HOST)
     port = int(os.environ.get("FLASK_RUN_PORT", config.DEFAULT_FLASK_RUN_PORT))
-    # Get debug setting from env var, default to config, ensure boolean conversion
+
     debug_str = os.environ.get("FLASK_DEBUG", str(config.DEFAULT_FLASK_DEBUG))
     debug = debug_str.lower() in ("true", "1", "t")
 
