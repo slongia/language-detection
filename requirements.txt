@@ -1,2 +1,7 @@
 ipykernel
 python-dotenv
+fastapi
+uvicorn
+scikit-learn
+joblib
+pydantic

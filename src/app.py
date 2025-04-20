@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+import requests
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 import pickle
@@ -11,6 +12,8 @@ import config  # Import the config module
 logging.basicConfig(level=logging.INFO)
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+FASTAPI_URL = "https://slongia-ml-fastapi-docker-hf.hf.space/predict"
 
 
 # --- Resource Loading ---
@@ -74,6 +77,27 @@ def preprocess_text(text):
 @app.route("/")
 def home():
     return render_template("home.html")
+
+
+@app.route("/predicthf", methods=["POST"])
+def predicthf():
+    user_input = request.form.get("text", "").strip()
+    if not user_input:
+        return render_template("home.html", pred="Error: Input text cannot be empty.")
+    try:
+        res = requests.post(FASTAPI_URL, json={"text": user_input})
+        if res.status_code == 200:
+            response = res.json().get("language")
+        else:
+            logging.error(
+                f"Error from FastAPI: {res.status_code}, Response: {res.text}"
+            )
+            response = f"Error from FastAPI: {res.status_code}"
+    except Exception as exc:
+        logging.exception("Request to FastAPI failed.")
+        response = f"Request failed: {str(exc)}"
+
+    return render_template("home.html", pred=f"The predicted language is: '{response}'")
 
 
 @app.route("/predict", methods=["POST"])
